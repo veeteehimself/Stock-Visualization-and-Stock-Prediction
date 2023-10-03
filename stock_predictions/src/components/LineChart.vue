@@ -28,7 +28,7 @@ myChart
 export default {
     name:"LineChart",
     mounted(){
-        this.createStockPriceHistoryResponse(60*60*24*365)
+        this.createStockPriceHistoryResponse(60*60*24*365*5)
     },
     setup(){
         let updateStockPriceHistoryChart=() =>{
@@ -63,14 +63,13 @@ export default {
         }
         let stockSymbol = ref("IBM")
         let AlphaVantageApi_URL_LINK= computed(() =>{
-            return'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+stockSymbol.value+'&apikey=EDOF97Z0B2DGU669'
+            return'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+stockSymbol.value+'&apikey=EDOF97Z0B2DGU669&outputsize=full'
         });
         let createStockPriceHistoryResponse = (dateRange) =>{
             axios.get(AlphaVantageApi_URL_LINK.value)
             .then(response =>{
                 dateRange;
                 stockMarketHistory = response
-                console.log(stockMarketHistory)
                 const data = stockMarketHistory.data['Time Series (Daily)']
                 for (const property in data){
                     let closingPrice = data[property]["4. close"]
@@ -79,7 +78,6 @@ export default {
                     let closingDateD = property.split('-')[2]
                     let closingDateFormatted = `${closingDateM}/${closingDateD}/${closingDateY}`
                     let closingDateEpochTime = Date.parse(closingDateFormatted)/1000
-                    console.log(closingDateEpochTime)
 
                     stockMarketHistoryDates.unshift(closingDateFormatted)
                     stockMarketHistoryEpochDates.unshift(closingDateEpochTime)
