@@ -1,5 +1,27 @@
 <template>
 <div class="lineChart" >
+    <div class="chartAndButtonContainer">
+        <form action="" id="stockSymbolSearchForm" @submit.prevent="createStockPriceHistoryResponse(`${60*60*24*365}`)">
+        <input type="text" name="stockSymbolSearch" placeholder="Enter the symbol of the stock you want to enter" id="stockSymbolSearchBar" v-model="stockSymbol">
+            <button type="submit" class="submit">Search</button>
+        </form>
+        <br>
+        <p>Active Stock Symbol : {{ stockSymbol }}</p>
+        <div class="dateRangeButtons">
+            <button @click="createStockPriceHistoryResponse(`${60*60*24*7}`)">
+            1 week</button>
+            <button @click="createStockPriceHistoryResponse(`${60*60*24*30}`)">
+            1 month day</button>
+            <button @click="createStockPriceHistoryResponse(`${60*60*24*30*6}`)">
+            6 months</button>
+            <button @click="createStockPriceHistoryResponse(`${60*60*24*365}`)">
+            1 year</button>
+            <button @click="createStockPriceHistoryResponse(`${60*60*24*365*5}`)">
+            5 years</button>
+            <button @click="createStockPriceHistoryResponse(`${60*60*24*365*20}`)">
+            20 years</button>
+        </div>
+    </div>
     <div id="chartContainer">
         <canvas id="myChart" width="400px" height="400px">
         </canvas>
@@ -28,7 +50,7 @@ myChart
 export default {
     name:"LineChart",
     mounted(){
-        this.createStockPriceHistoryResponse(60*60*24*365*5)
+        this.createStockPriceHistoryResponse(60*60*24*365)
     },
     setup(){
         let updateStockPriceHistoryChart=() =>{
@@ -61,11 +83,19 @@ export default {
                 data: data,
             })
         }
+
         let stockSymbol = ref("IBM")
         let AlphaVantageApi_URL_LINK= computed(() =>{
             return'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+stockSymbol.value+'&apikey=EDOF97Z0B2DGU669&outputsize=full'
+
         });
+
         let createStockPriceHistoryResponse = (dateRange) =>{
+            if ( stockMarketHistoryDates.length > 0){
+                stockMarketHistoryDates= []
+                stockMarketHistoryEpochDates = []
+                stockMarketHistoryPrices = []
+            }
             axios.get(AlphaVantageApi_URL_LINK.value)
             .then(response =>{
                 dateRange;
@@ -99,6 +129,7 @@ export default {
         }
         console.log(AlphaVantageApi_URL_LINK.value)
         return {
+            stockSymbol,
             updateStockPriceHistoryChart,
             createStockPriceHistoryResponse
         }
