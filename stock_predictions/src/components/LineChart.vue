@@ -14,26 +14,6 @@ import {ref,computed} from "vue";
 import axios from "axios"
 
 
-// var request = require('request');
-
-// // replace the "demo" apikey below with your own key from https://www.alphavantage.co/support/#api-key
-// var url = 'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol=IBM&apikey=EDOF97Z0B2DGU669';
-
-// request.get({
-//     url: url,
-//     json: true,
-//     headers: {'User-Agent': 'request'}
-//   }, (err, res, data) => {
-//     if (err) {
-//       console.log('Error:', err);
-//     } else if (res.statusCode !== 200) {
-//       console.log('Status:', res.statusCode);
-//     } else {
-//       // data is successfully parsed as a JSON object:
-//       console.log(data);
-//     }
-// });
-
 let stockMarketHistory = []
 let stockMarketHistoryDates= []
 let stockMarketHistoryEpochDates = []
@@ -90,7 +70,6 @@ export default {
             axios.get(AlphaVantageApi_URL_LINK.value)
             .then(response =>{
                 stockMarketHistory = response
-                console.log(stockMarketHistory.data['Weekly Adjusted Time Series'])
                 const data = stockMarketHistory.data['Weekly Adjusted Time Series']
                 dateRange;
                 for (const property in data){
@@ -104,13 +83,6 @@ export default {
                     stockMarketHistoryDates.unshift(closingDateFormatted)
                     stockMarketHistoryEpochDates.unshift(closingDateEpochTime)
                     stockMarketHistoryPrices.unshift(closingPrice)
-                    // closingPrice
-                    // closingDateEpochTime
-                    // closingDateFormatted
-                    // console.log(closingDateEpochTime)
-                    // console.log(closingDateFormatted)
-                    // console.log(closingPrice)
-
 
                 }
             }).then(()=>{
@@ -123,8 +95,9 @@ export default {
                 let idx = stockMarketHistoryEpochDates.findIndex(isLaterDate)
                 stockMarketHistoryDates.splice(0,idx)
                 stockMarketHistoryPrices.splice(0,idx)
-            })
-            updateStockPriceHistoryChart()
+                updateStockPriceHistoryChart()
+            });
+            // updateStockPriceHistoryChart()
         }
         console.log(AlphaVantageApi_URL_LINK.value)
         return {
