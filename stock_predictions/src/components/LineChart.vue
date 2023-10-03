@@ -29,7 +29,6 @@ export default {
     name:"LineChart",
     mounted(){
         this.createStockPriceHistoryResponse()
-        this.updateStockPriceHistoryChart()
     },
     setup(){
         let updateStockPriceHistoryChart=() =>{
@@ -97,7 +96,6 @@ export default {
                 stockMarketHistoryPrices.splice(0,idx)
                 updateStockPriceHistoryChart()
             });
-            // updateStockPriceHistoryChart()
         }
         console.log(AlphaVantageApi_URL_LINK.value)
         return {
