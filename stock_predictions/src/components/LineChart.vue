@@ -55,12 +55,12 @@ export default {
         let updateStockPriceHistoryChart=() =>{
             const ctx = document.getElementById("myChart");
 
-            const labels = ["Jan","Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"]
+            const labels = stockMarketHistoryDates
             const data = {
                 labels:labels,
                 datasets: [{
                     label:'Stock Market Price',
-                    data: [1,2,3,4,5,6,7],
+                    data: stockMarketHistoryPrices,
                     fill: false,
                     borderColor:"rbg(75,192,192)",
                     tension: 0 ,
@@ -70,6 +70,12 @@ export default {
                     }
 
                 }]
+            }
+
+
+            const charWithKey = Chart.getChart('myChart')
+            if (charWithKey != undefined){
+                charWithKey.destroy()   
             }
             myChart = new Chart(ctx, {
                 type:'line',
@@ -84,9 +90,41 @@ export default {
             axios.get(AlphaVantageApi_URL_LINK.value)
             .then(response =>{
                 stockMarketHistory = response
-                console.log(stockMarketHistory)
+                console.log(stockMarketHistory.data['Weekly Adjusted Time Series'])
+                const data = stockMarketHistory.data['Weekly Adjusted Time Series']
                 dateRange;
+                for (const property in data){
+                    let closingPrice = data[property]["4. close"]
+                    let closingDateM = property.split('-')[1]
+                    let closingDateY = property.split('-')[0]
+                    let closingDateD = property.split('-')[2]
+                    let closingDateFormatted = `${closingDateM}/${closingDateD}/${closingDateY}`
+                    let closingDateEpochTime = Date.parse(closingDateFormatted)/1000
+
+                    stockMarketHistoryDates.unshift(closingDateFormatted)
+                    stockMarketHistoryEpochDates.unshift(closingDateEpochTime)
+                    stockMarketHistoryPrices.unshift(closingPrice)
+                    // closingPrice
+                    // closingDateEpochTime
+                    // closingDateFormatted
+                    // console.log(closingDateEpochTime)
+                    // console.log(closingDateFormatted)
+                    // console.log(closingPrice)
+
+
+                }
+            }).then(()=>{
+                let now =  Date.now()/1000
+                let dateRange = now - (60*60*24*365)
+
+                const isLaterDate = (date) =>{
+                    return date> dateRange
+                }
+                let idx = stockMarketHistoryEpochDates.findIndex(isLaterDate)
+                stockMarketHistoryDates.splice(0,idx)
+                stockMarketHistoryPrices.splice(0,idx)
             })
+            updateStockPriceHistoryChart()
         }
         console.log(AlphaVantageApi_URL_LINK.value)
         return {
