@@ -28,7 +28,7 @@ myChart
 export default {
     name:"LineChart",
     mounted(){
-        this.createStockPriceHistoryResponse()
+        this.createStockPriceHistoryResponse(60*60*24*365)
     },
     setup(){
         let updateStockPriceHistoryChart=() =>{
@@ -63,14 +63,15 @@ export default {
         }
         let stockSymbol = ref("IBM")
         let AlphaVantageApi_URL_LINK= computed(() =>{
-            return'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED&symbol='+stockSymbol.value+'&apikey=EDOF97Z0B2DGU669'
+            return'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+stockSymbol.value+'&apikey=EDOF97Z0B2DGU669'
         });
         let createStockPriceHistoryResponse = (dateRange) =>{
             axios.get(AlphaVantageApi_URL_LINK.value)
             .then(response =>{
-                stockMarketHistory = response
-                const data = stockMarketHistory.data['Weekly Adjusted Time Series']
                 dateRange;
+                stockMarketHistory = response
+                console.log(stockMarketHistory)
+                const data = stockMarketHistory.data['Time Series (Daily)']
                 for (const property in data){
                     let closingPrice = data[property]["4. close"]
                     let closingDateM = property.split('-')[1]
@@ -78,6 +79,7 @@ export default {
                     let closingDateD = property.split('-')[2]
                     let closingDateFormatted = `${closingDateM}/${closingDateD}/${closingDateY}`
                     let closingDateEpochTime = Date.parse(closingDateFormatted)/1000
+                    console.log(closingDateEpochTime)
 
                     stockMarketHistoryDates.unshift(closingDateFormatted)
                     stockMarketHistoryEpochDates.unshift(closingDateEpochTime)
@@ -86,10 +88,10 @@ export default {
                 }
             }).then(()=>{
                 let now =  Date.now()/1000
-                let dateRange = now - (60*60*24*365)
+                let dateRangeDate = now - dateRange
 
                 const isLaterDate = (date) =>{
-                    return date> dateRange
+                    return date> dateRangeDate
                 }
                 let idx = stockMarketHistoryEpochDates.findIndex(isLaterDate)
                 stockMarketHistoryDates.splice(0,idx)
