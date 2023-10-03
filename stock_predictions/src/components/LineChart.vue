@@ -8,17 +8,17 @@
         <br>
         <p>Active Stock Symbol : {{ stockSymbol }}</p>
         <div class="dateRangeButtons">
-            <button @click="createStockPriceHistoryResponse(`${60*60*24*7}`)">
+            <button @click="changeZoomSize(`${60*60*24*7}`)">
             1 week</button>
-            <button @click="createStockPriceHistoryResponse(`${60*60*24*30}`)">
+            <button @click="changeZoomSize(`${60*60*24*30}`)">
             1 month day</button>
-            <button @click="createStockPriceHistoryResponse(`${60*60*24*30*6}`)">
+            <button @click="changeZoomSize(`${60*60*24*30*6}`)">
             6 months</button>
-            <button @click="createStockPriceHistoryResponse(`${60*60*24*365}`)">
+            <button @click="changeZoomSize(`${60*60*24*365}`)">
             1 year</button>
-            <button @click="createStockPriceHistoryResponse(`${60*60*24*365*5}`)">
+            <button @click="changeZoomSize(`${60*60*24*365*5}`)">
             5 years</button>
-            <button @click="createStockPriceHistoryResponse(`${60*60*24*365*20}`)">
+            <button @click="changeZoomSize(`${60*60*24*365*20}`)">
             20 years</button>
         </div>
     </div>
@@ -40,10 +40,6 @@ let stockMarketHistory = []
 let stockMarketHistoryDates= []
 let stockMarketHistoryEpochDates = []
 let stockMarketHistoryPrices = []
-stockMarketHistory
-stockMarketHistoryDates
-stockMarketHistoryEpochDates
-stockMarketHistoryPrices
 let myChart
 myChart
 
@@ -53,9 +49,8 @@ export default {
         this.createStockPriceHistoryResponse(60*60*24*365)
     },
     setup(){
-        let updateStockPriceHistoryChart=() =>{
+        let updateStockPriceHistoryChart=(stockMarketHistoryDates,stockMarketHistoryPrices) =>{
             const ctx = document.getElementById("myChart");
-
             const labels = stockMarketHistoryDates
             const data = {
                 labels:labels,
@@ -89,7 +84,20 @@ export default {
             return'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+stockSymbol.value+'&apikey=EDOF97Z0B2DGU669&outputsize=full'
 
         });
+        let changeZoomSize =(dateRange) =>{
+            let now =  Date.now()/1000
+                let dateRangeDate = now - dateRange
 
+                const isLaterDate = (date) =>{
+                    return date> dateRangeDate
+                }
+                let idx = stockMarketHistoryEpochDates.findIndex(isLaterDate)
+                const date = JSON.parse(JSON.stringify(stockMarketHistoryDates));
+                const prices = JSON.parse(JSON.stringify(stockMarketHistoryPrices));
+                date.splice(0,idx)
+                prices.splice(0,idx)
+                updateStockPriceHistoryChart(date,prices)
+        }
         let createStockPriceHistoryResponse = (dateRange) =>{
             if ( stockMarketHistoryDates.length > 0){
                 stockMarketHistoryDates= []
@@ -122,13 +130,16 @@ export default {
                     return date> dateRangeDate
                 }
                 let idx = stockMarketHistoryEpochDates.findIndex(isLaterDate)
-                stockMarketHistoryDates.splice(0,idx)
-                stockMarketHistoryPrices.splice(0,idx)
-                updateStockPriceHistoryChart()
+                const date = JSON.parse(JSON.stringify(stockMarketHistoryDates));
+                const prices = JSON.parse(JSON.stringify(stockMarketHistoryPrices));
+                date.splice(0,idx)
+                prices.splice(0,idx)
+                updateStockPriceHistoryChart(date,prices)
             });
         }
         console.log(AlphaVantageApi_URL_LINK.value)
         return {
+            changeZoomSize,
             stockSymbol,
             updateStockPriceHistoryChart,
             createStockPriceHistoryResponse
