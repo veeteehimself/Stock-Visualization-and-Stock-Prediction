@@ -11,7 +11,7 @@
             <button @click="changeZoomSize(`${60*60*24*7}`)">
             1 week</button>
             <button @click="changeZoomSize(`${60*60*24*30}`)">
-            1 month day</button>
+            1 month</button>
             <button @click="changeZoomSize(`${60*60*24*30*6}`)">
             6 months</button>
             <button @click="changeZoomSize(`${60*60*24*365}`)">
