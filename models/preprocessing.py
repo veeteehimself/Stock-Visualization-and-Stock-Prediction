@@ -30,13 +30,8 @@ def apiCall(stock):
         for date, entry in data.items():
             closingPrice = entry["4. close"]
             stockMarketHistoryPrices.insert(0, closingPrice)
-        return stockMarketHistoryPrices
+        return pd.DataFrame(stockMarketHistoryPrices, columns=['Closing Price'])
     return []
 
 
-# Create a DataFrame from the list
-df = pd.DataFrame(apiCall("AAPL"), columns=['Closing Price'])
-
-# Display the DataFrame
-print(df)
 
