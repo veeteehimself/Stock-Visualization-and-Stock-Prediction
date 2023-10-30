@@ -5,12 +5,14 @@ def AlphaVantageApi_URL_LINK(stock_symbol):
     # base_url = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY'
     # output_size = 'full'
 
-    url_link = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=AAPL&apikey=EDOF97Z0B2DGU669&outputsize=full'
+    # url_link = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=AAPL&apikey=EDOF97Z0B2DGU669&outputsize=full'
+    url_link = 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+stock_symbol+'&apikey=EDOF97Z0B2DGU669&outputsize=full'
+
     return url_link
 
-stock_symbol = 'AAPL'  # Replace 'AAPL' with your desired stock symbol
-api_url = AlphaVantageApi_URL_LINK(stock_symbol)
-print(api_url)
+# stock_symbol = 'AAPL'  # Replace 'AAPL' with your desired stock symbol
+# api_url = AlphaVantageApi_URL_LINK(stock_symbol)
+# print(api_url)
 
 
 
@@ -33,5 +35,7 @@ def apiCall(stock):
         return pd.DataFrame(stockMarketHistoryPrices, columns=['close'])
     return []
 
+print('ITS WORKING??')
 print(apiCall("AAPL"))
+print('IT IOS REALLY WORKING??')
 
