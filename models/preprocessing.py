@@ -33,5 +33,5 @@ def apiCall(stock):
         return pd.DataFrame(stockMarketHistoryPrices, columns=['Closing Price'])
     return []
 
-
+print(apiCall("AAPL"))
 
