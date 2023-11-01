@@ -2,9 +2,9 @@ const router = require("express").Router();
 
 const controller = require("./position.controller");
 
-router.get("/", controller.getUsers);
+router.get("/");
 
-router.get("/:id", controller.getUserById);
+router.get("/:id");
 
 router.post("/");
 
