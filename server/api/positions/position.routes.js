@@ -2,14 +2,14 @@ const router = require("express").Router();
 
 const controller = require("./position.controller");
 
-router.get("/");
+router.get("/", controller.getPositions);
 
-router.get("/:id");
+router.get("/:id", controller.getPositionById);
 
-router.post("/");
+router.post("/", controller.savePosition);
 
-router.put("/:id");
+router.put("/:id", controller.closePosition);
 
-router.delete("/:id");
+router.delete("/:id", controller.deletePosition);
 
 module.exports = router;
