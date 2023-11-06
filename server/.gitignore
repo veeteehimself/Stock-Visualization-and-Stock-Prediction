@@ -1,3 +1,4 @@
-config.json
+api/stocks/config.json
+mongo/config.json
 package-lock.json
 node_modules/

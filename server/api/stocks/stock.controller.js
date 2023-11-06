@@ -1,15 +1,14 @@
-const { key } = require('../config.json');
-const { writeFileSync, existsSync } = require('fs');
-const router = require('express').Router();
+// const Stock = require('./stock.model.js');
+const { existsSync, writeFileSync } = require('fs');
+const { key } = require('./config.json');
 const axios = require('axios');
 
-router.get('/', async (req, res) => {
+const getStocks = async (req, res) => {
     try {
         const { ticker } = req.query;
-        const localStock = `./stocks/${ticker}.json`;
 
-        if (existsSync(localStock)) {
-            info = require(`.${localStock}`);
+        if (existsSync(`./api/stocks/saved/${ticker}.json`)) {
+            info = require(`./saved/${ticker}.json`);
         } else {
             const { data } = await axios({
                 method: 'GET',
@@ -22,7 +21,10 @@ router.get('/', async (req, res) => {
                 },
             });
             info = data['Time Series (Daily)'];
-            writeFileSync(`./stocks/${ticker}.json`, JSON.stringify(info));
+            writeFileSync(
+                `./api/stocks/saved/${ticker}.json`,
+                JSON.stringify(info)
+            );
         }
 
         res.status(200).send({
@@ -40,6 +42,6 @@ router.get('/', async (req, res) => {
             error,
         });
     }
-});
+};
 
-module.exports = router;
+module.exports = { getStocks };

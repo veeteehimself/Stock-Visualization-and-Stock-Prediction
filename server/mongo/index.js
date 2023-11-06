@@ -1,15 +1,25 @@
-const mongoose = require("mongoose");
-
-const { username, password, projectname } = require("./config.json");
-const mongoURL = `mongodb+srv://${username}:${password}@5337usersbackend.6g2ne4p.mongodb.net/${projectname}?retryWrites=true&w=majority`;
+const { connect } = require('mongoose');
+const { username, password, cluster, project } = require('./config.json');
+const Position = require('../api/positions/position.model.js');
+// const Stock = require('../api/stocks/stock.model.js');
+const User = require('../api/users/user.model.js');
 
 const connectDB = async () => {
     try {
-        await mongoose.connect(mongoURL);
-        console.log("Connected to Mongo DB");
-    } catch(error) {
+        await connect(
+            `mongodb+srv://${username}:${password}@${cluster}.mongodb.net/${project}?retryWrites=true&w=majority`
+        );
+        console.log('Connected to Mongo DB');
+    } catch (error) {
         console.log(error);
     }
 };
 
-module.exports = { connectDB };
+const clearDB = async () => {
+    await connectDB();
+    await Position.deleteMany({});
+    // await Stock.deleteMany({});
+    await User.deleteMany({});
+};
+
+module.exports = { connectDB, clearDB };
