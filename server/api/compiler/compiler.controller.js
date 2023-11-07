@@ -4,12 +4,14 @@ const { PythonShell } = require('python-shell');
 
 const runFile = async (req, res) => {
   const pythonScript = '../../../models/ProjectLSTM.py';
+  const pythonArguments = [req];
   
   const options = {
     mode: 'text',
     pythonPath: '/usr/local/bin/python3', // Replace with your Anaconda Python path
     pythonOptions: ['-u'], // Unbuffered output
-    scriptPath: __dirname, // Current directory
+    scriptPath: __dirname, // Current directory,
+    args: pythonArguments
   };
 
   PythonShell.run(pythonScript, options, (err, results) => {
