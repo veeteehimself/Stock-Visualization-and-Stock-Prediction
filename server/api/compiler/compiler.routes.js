@@ -1,7 +1,6 @@
 const router = require("express").Router();
 
-const controller = require("./position.controller");
-
+const controller = require("./compiler.controller");
 router.get("/", controller.runFile);
 
 
