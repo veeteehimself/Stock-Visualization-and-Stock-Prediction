@@ -11,6 +11,7 @@ app.use(cors());
 app.use('/positions', require('./api/positions/position.routes.js'));
 app.use('/stock', require('./api/stocks/stock.routes.js'));
 app.use('/users', require('./api/users/user.routes.js'));
+app.use('/compiler', require('./api/compliler/compiler.routes.js'));
 
 app.listen(port, async () => {
     await connectDB();
