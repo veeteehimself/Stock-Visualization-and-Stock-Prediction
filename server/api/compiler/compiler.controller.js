@@ -4,7 +4,10 @@ const { PythonShell } = require('python-shell');
 
 const runFile = async (req, res) => {
   const pythonScript = '../../../models/ProjectLSTM.py';
-  const pythonArguments = [req];
+  const { params } = req;
+  console.log(params)
+  const pythonArguments = [params.stock];
+  console.log(pythonArguments)
   
   const options = {
     mode: 'text',
@@ -14,18 +17,29 @@ const runFile = async (req, res) => {
     args: pythonArguments
   };
 
-  PythonShell.run(pythonScript, options, (err, results) => {
-    if (err) {
-      console.error(`Error running Python script: ${err}`);
-      return res.status(500).send('Internal Server Error');
-    }
-
+  try {
+    const results = await runPythonScript(pythonScript, options);
     const output = results.join('\n');
     console.log(`Python script output: ${output}`);
-    res.send(`Python script output: ${output}`);
+    res.status(200).json({success:'File made!'});
+  } catch (err) {
+    console.error(`Error running Python script: ${err}`);
+    res.status(500).json({error:'Internal Server Error'});
+  }
+};
+
+const runPythonScript = (pythonScript, options) => {
+  return new Promise((resolve, reject) => {
+    PythonShell.run(pythonScript, options, (err, results) => {
+      if (err) {
+        console.log('I MADE IT INSIDE THE ERROR')
+        reject(err);
+      } else {
+        console.log('I MADE IT INTO THE CORRECT ONE!')
+        resolve(results);
+      }
+    });
   });
 }
-
-
   
 module.exports = {runFile};
