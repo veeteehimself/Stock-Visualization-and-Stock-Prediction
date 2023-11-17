@@ -35,7 +35,7 @@ else:
 
 df1 = df1.reset_index()['close']
 # only for AAL stock
-df1 = df1[0:1259]
+# df1 = df1[]
 
 
 # scales the close values between the values 0 and 1
@@ -77,6 +77,8 @@ if os.path.exists('models/LSTMHistory'+arg1+'.pickle'):
     with open('models/LSTMHistory'+arg1+'.pickle', 'rb') as file_pi:
         pickled_history = pickle.load(file_pi)
     x = X_test[-1]
+    y = x
+    print(scaler.inverse_transform(y))
     x = np.expand_dims(x, axis=0)
     predict =pickled_history.predict(x)
     predict = scaler.inverse_transform(predict)
