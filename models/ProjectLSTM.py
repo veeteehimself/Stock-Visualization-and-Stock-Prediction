@@ -71,60 +71,74 @@ ytest = np.array(ytest)
 X_train = X_train.reshape(X_train.shape[0],X_train.shape[1] , 1)
 X_test = X_test.reshape(X_test.shape[0],X_test.shape[1] , 1)
 
+with open('models/LSTMHistory'+arg1+'.pickle', 'wb') as file_pi:
+    pickled_history = pickle.load(file_pi)
+if pickled_history:
+    x = X_test[-1]
+    x = np.expand_dims(x, axis=0)
+    predict =pickled_history.predict(x)
+    predict = scaler.inverse_transform(predict)
+    print(predict)
 
-# Building the LSTM model using keras
-# input node is a sequence since LSTM accept sequences
-model=Sequential()
-# goes to a layer of 50 LSTM nodes which return a sequence
-model.add(LSTM(50,return_sequences=True,input_shape=(100,1)))
-# goes to another layer of 50 LSTM nodes which return a sequence
-model.add(LSTM(50,return_sequences=True))
-# goes to the last layer of 50 LSTM node, and does not return a sequence since the next layer will be one node
-model.add(LSTM(50))
-model.add(Dense(1))
-model.compile(loss='mean_squared_error',optimizer='adam')
-# TEMP 10 EPOCH
-model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=50,batch_size=64,verbose=1)
-
-# train_predict=model.predict(X_train)
-# test_predict=model.predict(X_test)
-
-# train_predict=scaler.inverse_transform(train_predict)
-# test_predict=scaler.inverse_transform(test_predict)
-
-# y_train=scaler.inverse_transform(np.transpose([y_train]))
-# ytest=scaler.inverse_transform(np.transpose([ytest]))
-
-# look_back=100
-# trainPredictPlot = np.empty_like(df1)
-# trainPredictPlot[:, :] = np.nan
-# trainPredictPlot[look_back:len(train_predict)+look_back, :] = train_predict
-
-# testPredictPlot = np.empty_like(df1)
-# testPredictPlot[:, :] = np.nan
-# testPredictPlot[len(train_predict)+(look_back*2)+1:len(df1)-1, :] = test_predict
-
-# plt.plot(scaler.inverse_transform(df1),label = "Actual values")
-# plt.plot(trainPredictPlot,label = "Training Prediction")
-# plt.plot(testPredictPlot, label = "Testing Prediction")
-# plt.legend()
-# plt.show()
-
-
-# model.save("models/LSTMTEST2")
-
-import pickle
-if arg1:
-    print('I WENT INSIDE THIS!')
-    with open('models/LSTMHistory'+arg1+'.pickle', 'wb') as file_pi:
-        pickle.dump(model, file_pi)
 else:
-    print('I DIDNT GO INSIDE OF IT')
-    with open('models/LSTMHistoryFAILED.pickle', 'wb') as file_pi:
-        pickle.dump(model, file_pi)
+    # Building the LSTM model using keras
+    # input node is a sequence since LSTM accept sequences
+    model=Sequential()
+    # goes to a layer of 50 LSTM nodes which return a sequence
+    model.add(LSTM(50,return_sequences=True,input_shape=(100,1)))
+    # goes to another layer of 50 LSTM nodes which return a sequence
+    model.add(LSTM(50,return_sequences=True))
+    # goes to the last layer of 50 LSTM node, and does not return a sequence since the next layer will be one node
+    model.add(LSTM(50))
+    model.add(Dense(1))
+    model.compile(loss='mean_squared_error',optimizer='adam')
+    # TEMP 10 EPOCH
+    model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=50,batch_size=64,verbose=1)
 
-print('I REACHED THE END!')
-# with open('./LSTMHistory.pickle', 'rb') as file_pi:
-#     pickled_history = pickle.load(file_pi)
-# pickled_history.predict(X_test)
+    # train_predict=model.predict(X_train)
+    # test_predict=model.predict(X_test)
+
+    # train_predict=scaler.inverse_transform(train_predict)
+    # test_predict=scaler.inverse_transform(test_predict)
+
+    # y_train=scaler.inverse_transform(np.transpose([y_train]))
+    # ytest=scaler.inverse_transform(np.transpose([ytest]))
+
+    # look_back=100
+    # trainPredictPlot = np.empty_like(df1)
+    # trainPredictPlot[:, :] = np.nan
+    # trainPredictPlot[look_back:len(train_predict)+look_back, :] = train_predict
+
+    # testPredictPlot = np.empty_like(df1)
+    # testPredictPlot[:, :] = np.nan
+    # testPredictPlot[len(train_predict)+(look_back*2)+1:len(df1)-1, :] = test_predict
+
+    # plt.plot(scaler.inverse_transform(df1),label = "Actual values")
+    # plt.plot(trainPredictPlot,label = "Training Prediction")
+    # plt.plot(testPredictPlot, label = "Testing Prediction")
+    # plt.legend()
+    # plt.show()
+
+
+    # model.save("models/LSTMTEST2")
+
+    import pickle
+    if arg1:
+        print('I WENT INSIDE THIS!')
+        with open('models/LSTMHistory'+arg1+'.pickle', 'wb') as file_pi:
+            pickle.dump(model, file_pi)
+    else:
+        print('I DIDNT GO INSIDE OF IT')
+        with open('models/LSTMHistoryFAILED.pickle', 'wb') as file_pi:
+            pickle.dump(model, file_pi)
+
+    print('I REACHED THE END!')
+    x = X_test[-1]
+    x = np.expand_dims(x, axis=0)
+    predict = model.predict(x)
+    predict = scaler.inverse_transform(predict)
+    print(predict)
+    # with open('./LSTMHistory.pickle', 'rb') as file_pi:
+    #     pickled_history = pickle.load(file_pi)
+    # pickled_history.predict(X_test)
 
