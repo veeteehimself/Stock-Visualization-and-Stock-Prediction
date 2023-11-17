@@ -84,31 +84,31 @@ model.add(LSTM(50))
 model.add(Dense(1))
 model.compile(loss='mean_squared_error',optimizer='adam')
 # TEMP 10 EPOCH
-model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=10,batch_size=64,verbose=1)
+model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=50,batch_size=64,verbose=1)
 
-train_predict=model.predict(X_train)
-test_predict=model.predict(X_test)
+# train_predict=model.predict(X_train)
+# test_predict=model.predict(X_test)
 
-train_predict=scaler.inverse_transform(train_predict)
-test_predict=scaler.inverse_transform(test_predict)
+# train_predict=scaler.inverse_transform(train_predict)
+# test_predict=scaler.inverse_transform(test_predict)
 
-y_train=scaler.inverse_transform(np.transpose([y_train]))
-ytest=scaler.inverse_transform(np.transpose([ytest]))
+# y_train=scaler.inverse_transform(np.transpose([y_train]))
+# ytest=scaler.inverse_transform(np.transpose([ytest]))
 
-look_back=100
-trainPredictPlot = np.empty_like(df1)
-trainPredictPlot[:, :] = np.nan
-trainPredictPlot[look_back:len(train_predict)+look_back, :] = train_predict
+# look_back=100
+# trainPredictPlot = np.empty_like(df1)
+# trainPredictPlot[:, :] = np.nan
+# trainPredictPlot[look_back:len(train_predict)+look_back, :] = train_predict
 
-testPredictPlot = np.empty_like(df1)
-testPredictPlot[:, :] = np.nan
-testPredictPlot[len(train_predict)+(look_back*2)+1:len(df1)-1, :] = test_predict
+# testPredictPlot = np.empty_like(df1)
+# testPredictPlot[:, :] = np.nan
+# testPredictPlot[len(train_predict)+(look_back*2)+1:len(df1)-1, :] = test_predict
 
-plt.plot(scaler.inverse_transform(df1),label = "Actual values")
-plt.plot(trainPredictPlot,label = "Training Prediction")
-plt.plot(testPredictPlot, label = "Testing Prediction")
-plt.legend()
-plt.show()
+# plt.plot(scaler.inverse_transform(df1),label = "Actual values")
+# plt.plot(trainPredictPlot,label = "Training Prediction")
+# plt.plot(testPredictPlot, label = "Testing Prediction")
+# plt.legend()
+# plt.show()
 
 
 # model.save("models/LSTMTEST2")
