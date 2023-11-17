@@ -30,7 +30,8 @@ const runFile = async (req, res) => {
   try{
     PythonShell.run(pythonScript, options).then(messages =>{
       console.log(`Python script output: ${messages}`);
-      res.status(200).json(`{success:'File made!'}`);
+      console.log(messages[messages.length-1])
+      res.status(200).json({success:'File made!!', prediction:messages[messages.length-1]});
     });
   } catch(err){
     console.error(`Error running Python script: ${err}`);
