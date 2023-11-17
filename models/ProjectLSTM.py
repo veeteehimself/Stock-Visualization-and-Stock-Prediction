@@ -73,8 +73,8 @@ ytest = np.array(ytest)
 X_train = X_train.reshape(X_train.shape[0],X_train.shape[1] , 1)
 X_test = X_test.reshape(X_test.shape[0],X_test.shape[1] , 1)
 
-if os.path.exists('models/LSTMHistory'+arg1+'.pickle'):
-    with open('models/LSTMHistory'+arg1+'.pickle', 'rb') as file_pi:
+if os.path.exists('models/models/LSTMHistory'+arg1+'.pickle'):
+    with open('models/models/LSTMHistory'+arg1+'.pickle', 'rb') as file_pi:
         pickled_history = pickle.load(file_pi)
     x = X_test[-1]
     y = x
@@ -97,7 +97,7 @@ else:
     model.add(Dense(1))
     model.compile(loss='mean_squared_error',optimizer='adam')
     # TEMP 10 EPOCH
-    model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=50,batch_size=64,verbose=0)
+    model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=30,batch_size=64,verbose=0)
 
     # train_predict=model.predict(X_train)
     # test_predict=model.predict(X_test)
@@ -126,10 +126,10 @@ else:
 
     # model.save("models/LSTMTEST2")
     if arg1:
-        with open('models/LSTMHistory'+arg1+'.pickle', 'wb') as file_pi:
+        with open('models/models/LSTMHistory'+arg1+'.pickle', 'wb') as file_pi:
             pickle.dump(model, file_pi)
     else:
-        with open('models/LSTMHistoryFAILED.pickle', 'wb') as file_pi:
+        with open('models/models/LSTMHistoryFAILED.pickle', 'wb') as file_pi:
             pickle.dump(model, file_pi)
 
     x = X_test[-1]
