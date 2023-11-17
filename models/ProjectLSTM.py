@@ -12,6 +12,8 @@ from sklearn.metrics import mean_squared_error
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import LSTM
+import pickle
+import os
 
 
 ssl._create_default_https_context = ssl._create_unverified_context
@@ -22,7 +24,7 @@ import sys
 
 # Access the command-line arguments
 if len(sys.argv) > 0:
-    print(sys.argv[1] )
+    # print(sys.argv[1] )
     arg1 = sys.argv[1] 
     df1 = apiCall(arg1)
     df1 = df1.reset_index()['close']
@@ -71,9 +73,9 @@ ytest = np.array(ytest)
 X_train = X_train.reshape(X_train.shape[0],X_train.shape[1] , 1)
 X_test = X_test.reshape(X_test.shape[0],X_test.shape[1] , 1)
 
-with open('models/LSTMHistory'+arg1+'.pickle', 'wb') as file_pi:
-    pickled_history = pickle.load(file_pi)
-if pickled_history:
+if os.path.exists('models/LSTMHistory'+arg1+'.pickle'):
+    with open('models/LSTMHistory'+arg1+'.pickle', 'rb') as file_pi:
+        pickled_history = pickle.load(file_pi)
     x = X_test[-1]
     x = np.expand_dims(x, axis=0)
     predict =pickled_history.predict(x)
@@ -93,7 +95,7 @@ else:
     model.add(Dense(1))
     model.compile(loss='mean_squared_error',optimizer='adam')
     # TEMP 10 EPOCH
-    model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=50,batch_size=64,verbose=1)
+    model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=50,batch_size=64,verbose=0)
 
     # train_predict=model.predict(X_train)
     # test_predict=model.predict(X_test)
@@ -121,18 +123,13 @@ else:
 
 
     # model.save("models/LSTMTEST2")
-
-    import pickle
     if arg1:
-        print('I WENT INSIDE THIS!')
         with open('models/LSTMHistory'+arg1+'.pickle', 'wb') as file_pi:
             pickle.dump(model, file_pi)
     else:
-        print('I DIDNT GO INSIDE OF IT')
         with open('models/LSTMHistoryFAILED.pickle', 'wb') as file_pi:
             pickle.dump(model, file_pi)
 
-    print('I REACHED THE END!')
     x = X_test[-1]
     x = np.expand_dims(x, axis=0)
     predict = model.predict(x)

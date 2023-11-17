@@ -35,7 +35,4 @@ def apiCall(stock):
         return df
     return []
 
-# print('ITS WORKING??')
-print(apiCall("AAPL"))
-# print('IT IOS REALLY WORKING??')
 
