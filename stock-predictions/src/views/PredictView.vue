@@ -47,11 +47,28 @@ async function fun() {
         </form>
       </div>
     </div>
-    <div class ='column has-text-centered'>
-      <div class="spinner-border " v-if="isLoading.value" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
+    <div v-if="isLoading.value" class="loading-overlay">
+      <div class ='column has-text-centered'>
+        <div class="spinner-border " role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
     </div>
     <p id="output" class='column has-text-centered'></p>
   </main>
 </template>
+
+<style scoped>
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent grey background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white; /* Text color for the loading message */
+}
+</style>
