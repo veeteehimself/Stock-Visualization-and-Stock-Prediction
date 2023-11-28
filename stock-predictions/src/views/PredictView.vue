@@ -3,6 +3,7 @@ import LineChart from './GraphView.vue'
 import axios from 'axios';
 import { reactive, ref } from 'vue';
 
+
 const stockData = reactive({
     ticker: 'IBM',
     range: '15552000000',
@@ -11,6 +12,7 @@ const stockData = reactive({
 });
 
 let data = ref(null);
+let isShowMenu = ref(true); // Use ref to define isShowMenu
 
 async function fun() {
   try {
@@ -32,15 +34,15 @@ async function fun() {
 
 <template>
     <main>
-        <div class='columns is-centered'>
-            <div class='column has-text-centered'>
-                <form @submit.prevent='fun'>
-                    <div>Press button to predict the stock for the next day</div>
-                    <input type='text' v-model='stockData.ticker' placeholder='Enter the symbol of the stock you want to enter'>
-                    <button type='submit' class='submit'>Predict</button>
-                </form>
-            </div>
+      <div class='columns is-centered'>
+        <div class='column has-text-centered'>
+          <form @submit.prevent='fun'>
+            <div>Press button to predict the stock for the next day</div>
+            <input type='text' v-model='stockData.ticker' placeholder='Enter the symbol of the stock you want to enter'>
+            <button type='submit' class='submit'>Predict</button>
+          </form>
         </div>
-        <p id="output"></p>
+      </div>
+      <p id="output" class='column has-text-centered'></p>
     </main>
 </template>
