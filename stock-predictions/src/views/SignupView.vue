@@ -1,7 +1,6 @@
 <script setup>
 import axios from 'axios';
 import { reactive } from 'vue';
-import auth from '../auth';
 import router from '../router';
 
 const data = reactive({
@@ -9,49 +8,47 @@ const data = reactive({
     password: '',
 });
 
-const authStatus = reactive({
+const auth = reactive({
     failed: false
-});
+})
 
-
-
-const authenticateLogin = async () => {
-    authStatus.failed = false;
+const registerUser = async () => {
+    auth.failed = false;
+    auth.success = false;
     try {
+        const newUser = {
+            username: data.username,
+            password: data.password
+        }
         const res = await axios({
             method: "POST",
-            url: `http://localhost:8080/users/login/${data.username}/${data.password}`
+            url: `http://localhost:8080/users/`,
+            data: newUser
         });
 
-        const { authorization } = res.headers;
-
-        if (authorization) {
-            const token = authorization.split(' ').pop();
-        
-            auth.token = token;
-            router.push({ path: '/portfolio' });
+        if(res.status === 200) {
+            router.push({ path: '/login' });
         }
-
+        
     } catch(error) {
         console.log(error);
-        authStatus.failed = true;
+        auth.failed = true;
     }
 }
-
 
 </script>
 
 <template>
-    <h1>Login Page</h1>
+    <h1>Sign Up Page</h1>
     <div class="register">
         <input type="text" v-model="data.username" placeholder="Enter Username" />
         <input type="text" v-model="data.password" placeholder="Enter Password" />
-        <button @click="authenticateLogin">Login</button>
+        <button @click="registerUser">Sign Up</button>
         <p>
-            <RouterLink to="/sign-up">Sign Up</RouterLink>
+            <RouterLink to="/login">Login</RouterLink>
         </p>
-        <p v-if="authStatus.failed">
-            Invalid username and/or password :(
+        <p v-if="auth.failed">
+            Username already taken :(
         </p>
     </div>
 </template>

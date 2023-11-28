@@ -2,6 +2,10 @@ const router = require("express").Router();
 
 const controller = require("./position.controller");
 
+const middleware = require("../middleware/authorization");
+
+router.use(middleware.verifyToken);
+
 router.get("/", controller.getPositions);
 
 router.get("/:id", controller.getPositionById);

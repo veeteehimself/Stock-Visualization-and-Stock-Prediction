@@ -2,14 +2,18 @@ const router = require("express").Router();
 
 const controller = require("./user.controller");
 
+const middleware = require("../middleware/authorization");
+
 router.get("/", controller.getUsers);
 
 router.get("/:id", controller.getUserById);
 
 router.post("/", controller.saveUser);
 
-router.put("/:id", controller.updateUser);
+router.put("/:id", middleware.verifyToken, controller.updateUser);
 
-router.delete("/:id", controller.deleteUser);
+router.delete("/:id", middleware.verifyToken, controller.deleteUser);
+
+router.post("/login/:username/:password", controller.loginUser);
 
 module.exports = router;
