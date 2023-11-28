@@ -1,9 +1,9 @@
 <script setup>
-import LineChart from './components/LineChart.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
     <main>
-        <LineChart />
+        <RouterView />
     </main>
 </template>
