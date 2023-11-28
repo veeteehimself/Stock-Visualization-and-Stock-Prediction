@@ -3,5 +3,6 @@
     "password": "e3GPf77Y7KTy2nu5",
     "cluster": "5337UsersBackend",
     "project": "cs5337groupproject",
-    "jwtsecret": "among us"
+    "jwtsecret": "among us",
+    "key": "1D3K0720M9O7Q63N"
 }

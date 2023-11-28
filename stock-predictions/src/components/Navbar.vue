@@ -7,16 +7,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="http://localhost:5173/">Home</a>
+          <RouterLink class="nav-link" to="/">Home</RouterLink>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="http://localhost:5173/predict">Predict</a>
+          <RouterLink class="nav-link" to="/predict">Predict</RouterLink>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Trade</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Login</a>
+          <RouterLink class="nav-link" to="/login">Login</RouterLink>
         </li>
       </ul>
     </div>
