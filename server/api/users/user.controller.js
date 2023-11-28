@@ -24,8 +24,8 @@ const getUsers = async (req, res) => {
 }
 
 const getUserById = async (req, res) => {
-    const { params } = req;
-    const id = params.id;
+    const { params, user } = req;
+    const id = user.id;
 
     try {
         const user = await User.findOne({

@@ -6,7 +6,7 @@ const middleware = require("../middleware/authorization");
 
 router.get("/", controller.getUsers);
 
-router.get("/:id", controller.getUserById);
+router.get("/view", middleware.verifyToken, controller.getUserById);
 
 router.post("/", controller.saveUser);
 
