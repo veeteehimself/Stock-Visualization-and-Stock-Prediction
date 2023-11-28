@@ -1,18 +1,13 @@
 const Position = require("./position.model");
 
 const getPositions = async (req, res) => {
-    const { query } = req;
+    const { query, user } = req;
     const ticker = query.ticker;
-    const userId = query.userId;
 
-    let filter = {};
+    let filter = { $regex: user.id };
 
     if (ticker) {
         filter.ticker = { $regex: ticker, $options: "i" };
-    }
-
-    if (userId) {
-        filter.userId = { $regex: userId };
     }
 
     try {
@@ -43,10 +38,11 @@ const getPositionById = async (req, res) => {
 }
 
 const savePosition = async (req, res) => {
-    const { body } = req;
+    const { body, user } = req;
 
     try {
         const positionDoc = new Position(body);
+        positionDoc.userId = user.id;
 
         saved = await positionDoc.save();
         res.json(saved);

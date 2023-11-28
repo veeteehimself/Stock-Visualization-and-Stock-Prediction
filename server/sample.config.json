@@ -2,5 +2,6 @@
     "username": "",
     "password": "",
     "cluster": "",
-    "project": ""
+    "project": "",
+    "jwtsecret": ""
 }

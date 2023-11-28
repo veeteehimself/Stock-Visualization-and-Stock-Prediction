@@ -1,4 +1,9 @@
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+const config = require("../../config.json");
 const User = require("./user.model");
+
 
 const getUsers = async (req, res) => {
     const { query } = req;
@@ -43,6 +48,9 @@ const saveUser = async (req, res) => {
     try {
         const userDoc = new User(body);
 
+        const salt = await bcrypt.genSalt(10);
+        userDoc.password = await bcrypt.hash(userDoc.password, salt);
+
         saved = await userDoc.save();
         res.json(saved);
     } catch (error) {
@@ -79,4 +87,37 @@ const deleteUser = async (req, res) => {
     }
 }
 
-module.exports = { getUsers, getUserById, saveUser, updateUser, deleteUser };
+const loginUser = async (req, res) => {
+    const { username, password } = req.params;
+
+    try {
+        const user = await User.findOne({ username: { $regex: username, $options: "i" } });
+
+        if(user) {
+            authenticated = await bcrypt.compare(password, user.password);
+            if(authenticated) {
+                const token = jwt.sign(
+                    { id: user._id, username: user.username },
+                    config.jwtsecret,
+                    { expiresIn: '24h' }
+                );
+
+                const authorized = user.toObject();
+
+                // remove the password key
+                delete authorized.password;
+
+                res.header('Authorization', `Bearer ${token}`).header("Access-Control-Expose-Headers","Authorization").json(authorized);
+            } else {
+                res.status(401).json({ error: "invalid password" });
+            }
+        } else {
+            res.status(401).json({ error: "invalid username" });
+        }
+    } catch(error) {
+        console.log(error);
+        res.status(500).json({ error: error.toString() });
+    }
+};
+
+module.exports = { getUsers, getUserById, saveUser, updateUser, deleteUser, loginUser };
