@@ -1,6 +1,6 @@
 // const Stock = require('./stock.model.js');
 const { existsSync, writeFileSync } = require('fs');
-const { key } = require('./config.json');
+const { key } = require('../../config.json');
 const axios = require('axios');
 
 const getStocks = async (req, res) => {
