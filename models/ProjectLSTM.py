@@ -33,8 +33,6 @@ else:
     df1 = df1.reset_index()['close']
 
 
-
-
 # scales the close values between the values 0 and 1
 scaler=MinMaxScaler(feature_range=(0,1))
 df1=scaler.fit_transform(np.array(df1).reshape(-1,1))

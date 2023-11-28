@@ -7,6 +7,11 @@ const router = createRouter({
             path: '/',
             name: 'home',
             component: () => import('../views/GraphView.vue')
+        },
+        {
+            path: '/predict',
+            name: 'predict_page',
+            component: () => import('../views/PredictView.vue')
         }
     ]
 })
