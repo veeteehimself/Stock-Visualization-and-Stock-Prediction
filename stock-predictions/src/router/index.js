@@ -25,6 +25,12 @@ const router = createRouter({
             path: "/portfolio",
             name: "portfolio",
             component: () => import('../views/PortfolioView.vue')
+        },
+      
+        {
+            path: '/predict',
+            name: 'predict_page',
+            component: () => import('../views/PredictView.vue')
         }
 
     ]

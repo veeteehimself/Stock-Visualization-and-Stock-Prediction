@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, onMounted } from 'vue';
+import { reactive, onMounted, ref,provide } from 'vue';
 import Chart from 'chart.js/auto';
 import axios from 'axios';
 
@@ -62,8 +62,9 @@ const getDateRangeIndex = () => {
 onMounted(async () => {
     await updateStocks();
 });
+provide('stockData', stockData);
 </script>
- 
+
 <template>
     <div class='columns is-centered'>
         <div class='column has-text-centered'>
