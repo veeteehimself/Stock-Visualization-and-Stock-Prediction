@@ -33,9 +33,6 @@ else:
     df1 = df1.reset_index()['close']
 
 
-df1 = df1.reset_index()['close']
-# only for AAL stock
-# df1 = df1[]
 
 
 # scales the close values between the values 0 and 1
@@ -49,7 +46,6 @@ test_size=len(df1)-training_size
 # makes 2 new lists train_data and test_data which are both subsets of the df1
 # train_data is going to be df1 from 0 to training size, and tet_data will be from training size to the rest of the data
 train_data,test_data=df1[0:training_size,:],df1[training_size:len(df1),:1]
-
 time_step = 100
 X_train, y_train = [], []
 for i in range(len(train_data)-time_step-1):
@@ -73,8 +69,8 @@ ytest = np.array(ytest)
 X_train = X_train.reshape(X_train.shape[0],X_train.shape[1] , 1)
 X_test = X_test.reshape(X_test.shape[0],X_test.shape[1] , 1)
 
-if os.path.exists('models/models/LSTMHistory'+arg1+'.pickle'):
-    with open('models/models/LSTMHistory'+arg1+'.pickle', 'rb') as file_pi:
+if os.path.exists('../models/models/LSTMHistory'+arg1+'.pickle'):
+    with open('../models/models/LSTMHistory'+arg1+'.pickle', 'rb') as file_pi:
         pickled_history = pickle.load(file_pi)
     x = X_test[-1]
     y = x
@@ -97,7 +93,7 @@ else:
     model.add(Dense(1))
     model.compile(loss='mean_squared_error',optimizer='adam')
     # TEMP 10 EPOCH
-    model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=30,batch_size=64,verbose=0)
+    model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=20,batch_size=64,verbose=0)
 
     # train_predict=model.predict(X_train)
     # test_predict=model.predict(X_test)
@@ -126,10 +122,10 @@ else:
 
     # model.save("models/LSTMTEST2")
     if arg1:
-        with open('models/models/LSTMHistory'+arg1+'.pickle', 'wb') as file_pi:
+        with open('../models/models/LSTMHistory'+arg1+'.pickle', 'wb') as file_pi:
             pickle.dump(model, file_pi)
     else:
-        with open('models/models/LSTMHistoryFAILED.pickle', 'wb') as file_pi:
+        with open('../models/models/LSTMHistoryFAILED.pickle', 'wb') as file_pi:
             pickle.dump(model, file_pi)
 
     x = X_test[-1]
