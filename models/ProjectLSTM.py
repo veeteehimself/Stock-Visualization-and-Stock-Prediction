@@ -91,7 +91,7 @@ else:
     model.add(Dense(1))
     model.compile(loss='mean_squared_error',optimizer='adam')
     # TEMP 10 EPOCH
-    model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=20,batch_size=64,verbose=0)
+    model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=35,batch_size=64,verbose=0)
 
     # train_predict=model.predict(X_train)
     # test_predict=model.predict(X_test)
