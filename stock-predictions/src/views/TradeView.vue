@@ -135,9 +135,12 @@ const buyStock = async () => {
     try {
         stockData.price = await getLatestStockPrice(stockData.ticker, new Date(Date.now()).toISOString())
         // stockData.price = stockData[]
-        console.log(stockData.ticker)
-        console.log(stockData.price )
-        console.log(authStatus.total_money)
+        stockData.price = Number(stockData.price)
+        authStatus.total_money = Number(authStatus.total_money)
+        // console.log(stockData.ticker)
+        // console.log("the stock data price is:"+stockData.price )
+        // console.log('the total price is:'+authStatus.total_money)
+        // console.log(authStatus.total_money > stockData.price)
         if (authStatus.total_money > stockData.price){
             const res = await axios({
             method: "POST",
@@ -146,16 +149,15 @@ const buyStock = async () => {
             },
             url: "http://localhost:8080/positions/",
             data: {ticker:stockData.ticker}
-        });
+            });
 
-        if (res.status === 200) {
-            authStatus.success = true;
-            authStatus.total_money -= stockData.price
-            authStatus.total_money = authStatus.total_money.toFixed(2)
-        } else {
-            authStatus.failed = true;
-        }
-
+            if (res.status === 200) {
+                authStatus.success = true;
+                authStatus.total_money -= stockData.price
+                authStatus.total_money = authStatus.total_money.toFixed(2)
+            } else {
+                authStatus.failed = true;
+            }
         } else{
             console.log('YOU DONT HAVE ENOUGH MONEY TO BUY THIS STOCK')
         }} catch(error) {
