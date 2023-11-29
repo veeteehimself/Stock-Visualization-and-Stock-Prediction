@@ -11,7 +11,8 @@ const authStatus = reactive({
 });
 
 const data = reactive({
-    positions: []
+    positions: [],
+    value: 0
 })
 
 const attemptAuth = async () => {
@@ -28,7 +29,6 @@ const attemptAuth = async () => {
             authStatus.success = true;
 
             for (const position of res.data) {
-                console.log(position);;
                 data.positions.push({
                     ...position,
                     openingPrice: await getStockPrice(position.ticker, position.opened),
@@ -67,17 +67,47 @@ const getStockPrice = async (ticker, date) => {
     }
 }
 
+const getPortfolioValue = async () => {
+    try {
+        const res = await axios({
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${auth.token}`
+            },
+            url: "http://localhost:8080/positions"
+        });
+
+        let totalValue = 10000;
+        for (const position of res.data) {
+            const openingPrice = await getStockPrice(position.ticker, position.opened);
+            const closingPrice = position.closed ? await getStockPrice(position.ticker, position.closed) : await getStockPrice(position.ticker, new Date(Date.now()).toISOString());
+
+            if (openingPrice && closingPrice)
+                totalValue += closingPrice - openingPrice;
+        }
+        return totalValue;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 onMounted(async () => {
     await attemptAuth();
+    data.value = await getPortfolioValue();
 });
 </script>
 
 <template>
     <h1>Portfolio</h1>
     <div v-if="authStatus.success">
-        <div v-for="position in data.positions">
-            {{ position.ticker }}  {{ position.openingPrice }} {{ position.closingPrice }} <div :class="{positive: position.closingPrice-position.openingPrice>0, negative: position.closingPrice-position.openingPrice<0}">{{ position.closingPrice - position.openingPrice }}</div>
+        <h2>{{ data.value }}</h2>
+        <div v-for="position in data.positions.filter(p => p.closed)">
+            Ticker: {{ position.ticker }}  Bought at: {{ position.openingPrice }} Sold at: {{ position.closingPrice }} <div :class="{positive: position.closingPrice-position.openingPrice>0, negative: position.closingPrice-position.openingPrice<0}">Net gain: {{ position.closingPrice - position.openingPrice }}</div>
         </div>
+        <div v-for="position in data.positions.filter(p => !p.closed)">
+            Ticker: {{ position.ticker }}  Bought at: {{ position.openingPrice }} Value: {{ position.closingPrice }} <div :class="{positive: position.closingPrice-position.openingPrice>0, negative: position.closingPrice-position.openingPrice<0}">Net gain: {{ position.closingPrice - position.openingPrice }}</div>
+        </div>
+        
     </div>
     <div v-if="authStatus.failed">
         <p>
