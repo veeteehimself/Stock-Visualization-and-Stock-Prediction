@@ -31,6 +31,11 @@ const router = createRouter({
             path: '/predict',
             name: 'predict_page',
             component: () => import('../views/PredictView.vue')
+        },
+        {
+            path: '/trade',
+            name: 'Trade Stocks',
+            component: () => import('../views/TradeView.vue')
         }
 
     ]

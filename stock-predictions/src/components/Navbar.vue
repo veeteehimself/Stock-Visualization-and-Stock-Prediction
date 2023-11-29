@@ -13,7 +13,7 @@
           <RouterLink class="nav-link" to="/predict">Predict</RouterLink>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Trade</a>
+          <RouterLink class="nav-link" to="/trade">Trade</RouterLink>
         </li>
         <li class="nav-item">
           <RouterLink class="nav-link" to="/login">Login</RouterLink>
