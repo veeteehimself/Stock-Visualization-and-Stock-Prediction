@@ -23,14 +23,18 @@ from preprocessing import apiCall
 import sys
 
 # Access the command-line arguments
-if len(sys.argv) > 0:
-    # print(sys.argv[1] )
-    arg1 = sys.argv[1] 
-    df1 = apiCall(arg1)
-    df1 = df1.reset_index()['close']
-else:
-    df1 = apiCall("IBM")
-    df1 = df1.reset_index()['close']
+try:
+    if len(sys.argv) > 0:
+        # print(sys.argv[1] )
+        arg1 = sys.argv[1] 
+        df1 = apiCall(arg1)
+        df1 = df1.reset_index()['close']
+    else:
+        df1 = apiCall("IBM")
+        df1 = df1.reset_index()['close']
+except:
+    print('MAX API CALLS')
+    exit()
 
 
 # scales the close values between the values 0 and 1
