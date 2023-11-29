@@ -23,8 +23,13 @@ async function fun() {
     data.value = response.data;
     // Handle the data here
     var outputElement = document.getElementById("output");
-    outputElement.textContent =
+    if(data.value['prediction'] == "MAX API CALLS"){
+      outputElement.textContent = "MAX API CALLS HAVE BEEN MADE";
+    } else {
+      outputElement.textContent =
       "The predicted price is:" + data.value['prediction'].substring(2, data.value['prediction'].length - 2);
+    }
+
     outputElement.style.display = "block";
   } catch (error) {
     // Handle errors here
