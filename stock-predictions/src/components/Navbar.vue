@@ -16,6 +16,9 @@
           <RouterLink class="nav-link" to="/trade">Trade</RouterLink>
         </li>
         <li class="nav-item">
+          <RouterLink class="nav-link" to="/portfolio">Portfolio</RouterLink>
+        </li>
+        <li class="nav-item">
           <RouterLink class="nav-link" to="/login">Login</RouterLink>
         </li>
       </ul>
