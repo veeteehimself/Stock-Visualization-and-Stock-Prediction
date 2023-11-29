@@ -22,6 +22,7 @@ const getStocks = async (req, res) => {
                     outputsize: 'full',
                 },
             });
+            console.log(data)
             info = data['Time Series (Daily)'];
             console.log(info);
             writeFileSync(

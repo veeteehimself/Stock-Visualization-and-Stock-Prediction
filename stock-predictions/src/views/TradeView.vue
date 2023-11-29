@@ -60,6 +60,22 @@ const getStockPrice = async (ticker, date) => {
         console.log(error);
     }
 }
+const updateStock = async () => {
+    try {
+        console.log(stockData.ticker)
+        const { data } = await axios({
+        method: 'GET',
+        url: `http://localhost:8080/stock?ticker=${stockData.ticker}`,
+
+    });
+        const { prices } = data;
+        console.log("didn't contain")
+        stockData.price = prices[prices.length-1];
+        return
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 const getLatestStockPrice = async (ticker, date) => {
     try {
@@ -96,9 +112,11 @@ const getUserTotalMoney = async () => {
                 for (const position of res.data.positions) {
                 console.log(position.ticker)
                 console.log(position.opened)
-                let openingPrice = await getStockPrice(position.ticker, position.opened)
-                console.log(openingPrice)
-                total -= openingPrice
+                if (!position.closed){
+                    let openingPrice = await getStockPrice(position.ticker, position.opened)
+                    console.log(openingPrice)
+                    total -= openingPrice
+                }
             }
             }
             authStatus.total_money = total.toFixed(2)
@@ -189,13 +207,16 @@ onMounted(async () => {
     <div> You currently have {{ authStatus.total_money }}$ to spend!</div>
     <div class='columns is-centered'>
       <div class='column has-text-centered'>
-        <form @submit.prevent='getUserTotalMoney'>
+        <form @submit.prevent='updateStock'>
           <div>Select which stock you want to buy or sell</div>
 
           <input type='text' v-model='stockData.ticker' placeholder='Enter the symbol of the stock you want to enter'>
-          <button type='submit' class='submit'>Predict</button>
+          <button type='submit' class='submit'>Select</button>
         </form>
       </div>
+    </div>
+    <div class='columns is-centered'>
+        The price of the current stock you are looking at is : {{ stockData.price }}
     </div>
     <div class='column has-text-centered'>
         <form @submit.prevent='buyStock'>
