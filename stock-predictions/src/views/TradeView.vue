@@ -18,7 +18,6 @@ const authStatus = reactive({
 
 
 let username = reactive({value: ""});
-const formatDate = (date) => date.split("T")[0].split("-").join("/");
 const getUserFromToken = async () => {
     try {
         const res = await axios({
@@ -39,6 +38,9 @@ const getUserFromToken = async () => {
     }
 }
 
+
+const formatDate = (date) => date.split("T")[0].split("-").join("/");
+
 const getStockPrice = async (ticker, date) => {
     try {
         const res = await axios({
@@ -47,8 +49,12 @@ const getStockPrice = async (ticker, date) => {
         })
         const { prices, dates } = res.data;
 
-        console.log(dates.indexOf(formatDate(date)))
-        console.log(prices[dates.indexOf(formatDate(date))])
+        if(dates.indexOf(formatDate(date))===-1){
+            console.log("didn't contain")
+            return prices[prices.length-1];
+        }
+
+        // console.log(console.log(res.data.data));
         return prices[dates.indexOf(formatDate(date))];
     } catch (error) {
         console.log(error);
@@ -76,7 +82,6 @@ const getLatestStockPrice = async (ticker, date) => {
 const getUserTotalMoney = async () => {
     try {
         let total = 10000 
-        console.log(12312321)
         const res = await axios({
             method: "GET",
             headers: {
@@ -85,15 +90,18 @@ const getUserTotalMoney = async () => {
             url: "http://localhost:8080/users/view"+"?username=" + username.value
         });
         if (res.status === 200) {
+            console.log(res.data.positions)
             authStatus.success = true;
-            if(res.data.length > 0 ){
-                for (const position of res.data) {
-                openingPrice = await getStockPrice(position.ticker, position.opened),
-                closingPrice = position.closed ? await getStockPrice(position.ticker, position.closed) : await getStockPrice(position.ticker, new Date(Date.now()).toISOString())
-                total -= closingPrice - openingPrice
+            if(res.data.positions.length > 0 ){
+                for (const position of res.data.positions) {
+                console.log(position.ticker)
+                console.log(position.opened)
+                let openingPrice = await getStockPrice(position.ticker, position.opened)
+                console.log(openingPrice)
+                total -= openingPrice
             }
             }
-            authStatus.total_money = total
+            authStatus.total_money = total.toFixed(2)
             console.log(total);
         } else {
             authStatus.failed = true;
@@ -155,10 +163,11 @@ const sellStock = async () => {
                 openingPrice = await getStockPrice(position.ticker, position.opened),
                 closingPrice = position.closed ? await getStockPrice(position.ticker, position.closed) : await getStockPrice(position.ticker, new Date(Date.now()).toISOString())
                 total -= closingPrice - openingPrice
+                console.log(total)
             }
             }
             authStatus.total_money = total
-            console.log(total);
+            console.log('THE FCKIN TOTAL IS '+total);
         } else {
             authStatus.failed = true;
         }
