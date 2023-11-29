@@ -119,7 +119,7 @@ const buyStock = async () => {
                 Authorization: `Bearer ${auth.token}`
             },
             url: "http://localhost:8080/positions/",
-            body: {ticker:stockData.ticker}
+            data: {ticker:stockData.ticker}
         });
 
         if (res.status === 200) {

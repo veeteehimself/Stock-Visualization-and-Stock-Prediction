@@ -28,13 +28,13 @@ const attemptAuth = async () => {
             authStatus.success = true;
 
             for (const position of res.data) {
+                console.log(position);;
                 data.positions.push({
                     ...position,
                     openingPrice: await getStockPrice(position.ticker, position.opened),
                     closingPrice: position.closed ? await getStockPrice(position.ticker, position.closed) : await getStockPrice(position.ticker, new Date(Date.now()).toISOString())
                 });
             }
-            console.log(res.data);
         } else {
             authStatus.failed = true;
         }
@@ -55,8 +55,12 @@ const getStockPrice = async (ticker, date) => {
         })
         const { prices, dates } = res.data;
 
-        console.log(dates.indexOf(formatDate(date)))
-        console.log(prices[dates.indexOf(formatDate(date))])
+        if(dates.indexOf(formatDate(date))===-1){
+            console.log("didn't contain")
+            return prices[prices.length-1];
+        }
+
+        // console.log(console.log(res.data.data));
         return prices[dates.indexOf(formatDate(date))];
     } catch (error) {
         console.log(error);
@@ -72,7 +76,7 @@ onMounted(async () => {
     <h1>Portfolio</h1>
     <div v-if="authStatus.success">
         <div v-for="position in data.positions">
-            {{ position.ticker }}  {{ position.openingPrice }} {{ position.closingPrice }} {{ position.closingPrice - position.openingPrice }}
+            {{ position.ticker }}  {{ position.openingPrice }} {{ position.closingPrice }} <div :class="{positive: position.closingPrice-position.openingPrice>0, negative: position.closingPrice-position.openingPrice<0}">{{ position.closingPrice - position.openingPrice }}</div>
         </div>
     </div>
     <div v-if="authStatus.failed">
@@ -87,5 +91,10 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-
+.positive {
+    color: green
+}
+.negative {
+    color: red
+}
 </style>

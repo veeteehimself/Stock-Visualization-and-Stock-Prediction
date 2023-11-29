@@ -42,6 +42,7 @@ const savePosition = async (req, res) => {
     const { body, user } = req;
 
     try {
+        console.log(body);
         const positionDoc = new Position(body);
         positionDoc.userId = user.id;
 

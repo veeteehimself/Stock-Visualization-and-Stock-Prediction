@@ -7,10 +7,10 @@ const getStocks = async (req, res) => {
     try {
         const { ticker } = req.query;
 
-        if (existsSync(`./api/stocks/saved/${ticker}.json`)) {
-            info = require(`./saved/${ticker}.json`);
-            console.log(Object.keys(info)[0])
-            //console.log(new Date(info.data.dates.pop()));
+        let info;
+        if (existsSync(`./api/stocks/saved/${new Date(Date.now()).toISOString().split("T")[0]}${ticker}.json`)) {
+            info = require(`./saved/${new Date(Date.now()).toISOString().split("T")[0]}${ticker}.json`);
+
         } else {
             const { data } = await axios({
                 method: 'GET',
@@ -23,8 +23,9 @@ const getStocks = async (req, res) => {
                 },
             });
             info = data['Time Series (Daily)'];
+            console.log(info);
             writeFileSync(
-                `./api/stocks/saved/${ticker}.json`,
+                `./api/stocks/saved/${new Date(Date.now()).toISOString().split("T")[0]}${ticker}.json`,
                 JSON.stringify(info)
             );
         }
