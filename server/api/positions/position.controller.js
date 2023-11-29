@@ -4,16 +4,17 @@ const getPositions = async (req, res) => {
     const { query, user } = req;
     const ticker = query.ticker;
 
-    let filter = { $regex: user.id };
+    let filter = { userId: user.id };
 
     if (ticker) {
-        filter.ticker = { $regex: ticker, $options: "i" };
+        filter.ticker = { ticker: { $regex: ticker, $options: "i" } };
     }
 
     try {
         const positions = await Position.find(filter);
         res.json(positions);
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: error.toString() });
     }
 }
