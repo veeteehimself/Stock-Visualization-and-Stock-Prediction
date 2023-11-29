@@ -13,8 +13,6 @@ const authStatus = reactive({
     failed: false
 });
 
-
-
 const authenticateLogin = async () => {
     authStatus.failed = false;
     try {
@@ -29,6 +27,7 @@ const authenticateLogin = async () => {
             const token = authorization.split(' ').pop();
         
             auth.token = token;
+            
             router.push({ path: '/portfolio' });
         }
 
@@ -37,7 +36,6 @@ const authenticateLogin = async () => {
         authStatus.failed = true;
     }
 }
-
 
 </script>
 

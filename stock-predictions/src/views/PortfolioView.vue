@@ -13,7 +13,7 @@ const authStatus = reactive({
 const data = reactive({
     positions: [],
     value: 0
-})
+});
 
 const attemptAuth = async () => {
     try {
@@ -56,7 +56,6 @@ const getStockPrice = async (ticker, date) => {
         const { prices, dates } = res.data;
 
         if(dates.indexOf(formatDate(date))===-1){
-            console.log("didn't contain")
             return prices[prices.length-1];
         }
 
@@ -117,7 +116,6 @@ onMounted(async () => {
     <div v-if="authStatus.error">
         <p> {{  authStatus.errorMsg }} </p>
     </div>
-    <p> {{ auth.token }}</p>
 </template>
 
 <style scoped>
