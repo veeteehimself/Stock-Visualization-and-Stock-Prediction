@@ -100,9 +100,6 @@ const getUserTotalMoney = async () => {
         let total = 10000 
         const res = await axios({
             method: "GET",
-            headers: {
-                Authorization: `Bearer ${auth.token}`
-            },
             url: "http://localhost:8080/users/view"+"?username=" + username.value
         });
         if (res.status === 200) {

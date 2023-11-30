@@ -19,9 +19,6 @@ const attemptAuth = async () => {
     try {
         const res = await axios({
             method: "GET",
-            headers: {
-                Authorization: `Bearer ${auth.token}`
-            },
             url: "http://localhost:8080/positions"
         });
 
@@ -70,9 +67,6 @@ const getPortfolioValue = async () => {
     try {
         const res = await axios({
             method: "GET",
-            headers: {
-                Authorization: `Bearer ${auth.token}`
-            },
             url: "http://localhost:8080/positions"
         });
 
@@ -96,9 +90,6 @@ const closePosition = (position) => {
         const res = axios({
             method: "PUT",
             data: position,
-            headers: {
-                Authorization: `Bearer ${auth.token}`
-            },
             url: `http://localhost:8080/positions/${position._id}`
         });
     } catch(error) {
