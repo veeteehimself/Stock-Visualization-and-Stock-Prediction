@@ -11,7 +11,7 @@ const runFile = async (req, res) => {
 
   const options = {
     mode: 'text',
-    pythonPath: '/usr/local/bin/python3', // Replace with your Anaconda Python path
+    pythonPath: 'C:\\Users\\jlbjl\\AppData\\Local\\Programs\\Python\\Python312\\python.exe', // Replace with your Anaconda Python path
     pythonOptions: ['-u'], // Unbuffered output
     scriptPath: __dirname, // Current directory,
     args: pythonArguments

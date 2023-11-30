@@ -166,36 +166,36 @@ const buyStock = async () => {
             }
         }
 
-const sellStock = async () => {
-    try {
-        console.log(12312321)
-        const res = await axios({
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${auth.token}`
-            },
-            url: "http://localhost:8080/users/view"+"?username=" + username.value
-        });
-        if (res.status === 200) {
-            authStatus.success = true;
-            if(res.data.length > 0 ){
-                for (const position of res.data) {
-                openingPrice = await getStockPrice(position.ticker, position.opened),
-                closingPrice = position.closed ? await getStockPrice(position.ticker, position.closed) : await getStockPrice(position.ticker, new Date(Date.now()).toISOString())
-                total -= closingPrice - openingPrice
-                console.log(total)
-            }
-            }
-            authStatus.total_money = total
-            console.log('THE FCKIN TOTAL IS '+total);
-        } else {
-            authStatus.failed = true;
-        }
-    } catch(error) {
-        console.log(error);
-        auth.failed = true;
-    }
-}
+// const sellStock = async () => {
+//     try {
+//         console.log(12312321)
+//         const res = await axios({
+//             method: "GET",
+//             headers: {
+//                 Authorization: `Bearer ${auth.token}`
+//             },
+//             url: "http://localhost:8080/users/view"+"?username=" + username.value
+//         });
+//         if (res.status === 200) {
+//             authStatus.success = true;
+//             if(res.data.length > 0 ){
+//                 for (const position of res.data) {
+//                 openingPrice = await getStockPrice(position.ticker, position.opened),
+//                 closingPrice = position.closed ? await getStockPrice(position.ticker, position.closed) : await getStockPrice(position.ticker, new Date(Date.now()).toISOString())
+//                 total -= closingPrice - openingPrice
+//                 console.log(total)
+//             }
+//             }
+//             authStatus.total_money = total
+//             console.log('THE FCKIN TOTAL IS '+total);
+//         } else {
+//             authStatus.failed = true;
+//         }
+//     } catch(error) {
+//         console.log(error);
+//         auth.failed = true;
+//     }
+// }
 
 onMounted(async () => {
     await getUserFromToken();
@@ -224,7 +224,6 @@ onMounted(async () => {
         <form @submit.prevent='buyStock'>
             <button> BUY 1 STOCK</button>
         </form>
-        <button> SELL 1 STOCK</button>
     </div>
 
     
