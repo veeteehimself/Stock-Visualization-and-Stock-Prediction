@@ -43,7 +43,7 @@ const authenticateLogin = async () => {
     <h1>Login Page</h1>
     <div class="register">
         <input type="text" v-model="data.username" placeholder="Enter Username" />
-        <input type="text" v-model="data.password" placeholder="Enter Password" />
+        <input type="password" v-model="data.password" placeholder="Enter Password" />
         <button @click="authenticateLogin">Login</button>
         <p>
             <RouterLink to="/sign-up">Sign Up</RouterLink>
