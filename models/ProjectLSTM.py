@@ -12,7 +12,8 @@ from sklearn.metrics import mean_squared_error
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import LSTM
-import pickle
+# import pickle
+import joblib as pickle
 import os
 
 
