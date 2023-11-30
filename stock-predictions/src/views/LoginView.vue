@@ -3,6 +3,7 @@ import axios from 'axios';
 import { reactive } from 'vue';
 import auth from '../auth';
 import router from '../router';
+import { reloadLogin } from '../components/Navbar.vue';
 
 const data = reactive({
     username: '',
@@ -25,9 +26,9 @@ const authenticateLogin = async () => {
 
         if (authorization) {
             const token = authorization.split(' ').pop();
-        
-            auth.token = token;
-            
+    
+            localStorage.setItem("authorization", token);
+            reloadLogin();
             router.push({ path: '/portfolio' });
         }
 
@@ -43,7 +44,7 @@ const authenticateLogin = async () => {
     <h1>Login Page</h1>
     <div class="register">
         <input type="text" v-model="data.username" placeholder="Enter Username" />
-        <input type="text" v-model="data.password" placeholder="Enter Password" />
+        <input type="password" v-model="data.password" placeholder="Enter Password" />
         <button @click="authenticateLogin">Login</button>
         <p>
             <RouterLink to="/sign-up">Sign Up</RouterLink>

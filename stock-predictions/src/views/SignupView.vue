@@ -42,7 +42,7 @@ const registerUser = async () => {
     <h1>Sign Up Page</h1>
     <div class="register">
         <input type="text" v-model="data.username" placeholder="Enter Username" />
-        <input type="text" v-model="data.password" placeholder="Enter Password" />
+        <input type="password" v-model="data.password" placeholder="Enter Password" />
         <button @click="registerUser">Sign Up</button>
         <p>
             <RouterLink to="/login">Login</RouterLink>
