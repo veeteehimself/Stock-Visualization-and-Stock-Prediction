@@ -12,20 +12,17 @@ from sklearn.metrics import mean_squared_error
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.layers import LSTM
-<<<<<<< HEAD
-# import pickle
-import joblib as pickle
-=======
+
 import pickle
 # import joblib as pickle
->>>>>>> 0340d26edec8c0d8ce1a66f696411db12d7f4bb6
+
 import os
 
 
 ssl._create_default_https_context = ssl._create_unverified_context
 # df = pd.read_csv("https://raw.githubusercontent.com/LyJacky/stocks/4802f4e0f139ee0568afbad309086d90c78a53b7/all_stocks_5yr.csv")
 
-from preprocessing import apiCall
+from preprocessing import apiCall,readJson
 import sys
 
 # Access the command-line arguments
@@ -33,13 +30,17 @@ try:
     if len(sys.argv) > 0:
         # print(sys.argv[1] )
         arg1 = sys.argv[1] 
-        df1 = apiCall(arg1)
+        print("THIS IS THE ARG1",arg1)
+        # df1 = apiCall(arg1)
+        df1 = readJson(arg1)
+        print(df1)
         df1 = df1.reset_index()['close']
     else:
-        df1 = apiCall("IBM")
+        # df1 = apiCall("IBM")
+        df1 = readJson("IBM")
         df1 = df1.reset_index()['close']
-except:
-    print('MAX API CALLS')
+except Exception as e:
+    print(e)
     exit()
 
 
@@ -82,7 +83,7 @@ if os.path.exists('../models/models/LSTMHistory'+arg1+'.pickle'):
         pickled_history = pickle.load(file_pi)
     x = X_test[-1]
     y = x
-    print(scaler.inverse_transform(y))
+    # print(scaler.inverse_transform(y))
     x = np.expand_dims(x, axis=0)
     predict =pickled_history.predict(x)
     predict = scaler.inverse_transform(predict)
@@ -101,7 +102,7 @@ else:
     model.add(Dense(1))
     model.compile(loss='mean_squared_error',optimizer='adam')
     # TEMP 10 EPOCH
-    model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=35,batch_size=64,verbose=0)
+    model.fit(X_train,y_train,validation_data=(X_test,ytest),epochs=20,batch_size=64,verbose=0)
 
     # train_predict=model.predict(X_train)
     # test_predict=model.predict(X_test)
