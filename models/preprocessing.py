@@ -29,12 +29,59 @@ def apiCall(stock):
         return df
     return []
 
+from datetime import datetime
+import os
 
-def readJson():
-    data = json.load("./server/stocks/saved/2023-11-29IMB.json")
-    res = []
-    for entry in data.items():
-        close = entry["close"]
-        res.insert(0, close)
-    df = pd.DataFrame(res, columns=['close'], dtype='float64')
-    return []
+def readJson(ticker):
+
+    try:
+        link = AlphaVantageApi_URL_LINK(ticker)
+        print("THE CURRENT PATH IS: ",os.getcwd())
+        file_path = f"./api/stocks/saved/{datetime.now().isoformat().split('T')[0]}{ticker}.json"
+        print(file_path)
+
+        if os.path.exists(file_path):
+            with open(file_path, 'r') as file:
+                info = json.load(file)
+                res = []
+                for entry in info.items():
+                    close = entry[1]['4. close']
+                    res.insert(0, close)
+                df = pd.DataFrame(res, columns=['close'], dtype='float64')
+                return df
+        else:
+            response = requests.get(
+                link,
+            )
+            data = response.json()
+            info = data['Time Series (Daily)']
+            print(info)
+
+            with open(file_path, 'w') as file:
+                json.dump(info, file)
+
+            prices = [float(prices['4. close']) for prices in reversed(info.values())]
+            df = pd.DataFrame(prices, columns=['close'], dtype='float64')
+            return df
+
+
+    except Exception as e:
+        print(e)
+        # print(result)
+    # except Exception as error:
+    #     print('THE FREAKING ERROR IS ')
+    #     print(error)
+    #     result = {
+    #         'message': 'Error fetching data',
+    #         'error': str(error),
+    #     }
+    #     print(result)
+
+    # data  = requests.get("http://localhost:8080/stock/?ticker="+ ticker)
+    # print(data)
+    # res = []
+    # for entry in data.items():
+    #     close = entry[1]['4. close']
+    #     res.insert(0, close)
+    # df = pd.DataFrame(res, columns=['close'], dtype='float64')
+    # return df
