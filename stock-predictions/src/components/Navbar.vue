@@ -19,11 +19,8 @@
           <li class="nav-item">
             <RouterLink class="nav-link" to="/portfolio">Portfolio</RouterLink>
           </li>
-          <li class="nav-item" v-if="!authStatus">
-            <RouterLink class="nav-link" to="/login">Login</RouterLink>
-          </li>
-          <li class="nav-item" v-if="authStatus">
-            <button @click="logOut">Log Out</button>
+          <li class="nav-item">
+            <RouterLink class="nav-link" to="/profile">Profile</RouterLink>
           </li>
         </ul>
       </div>
@@ -32,19 +29,5 @@
 </template>
   
 <script setup>
-import { onUpdated, ref } from 'vue';
-import router from '../router';
 
-const logOut = () => {
-    localStorage.removeItem("authorization");
-    router.push("/");
-    reloadLogin();
-};
-
-let authStatus = ref(false);
-
-const reloadLogin = () => {
-    if (localStorage.getItem("authorization"))
-        authStatus = true;
-}
 </script>

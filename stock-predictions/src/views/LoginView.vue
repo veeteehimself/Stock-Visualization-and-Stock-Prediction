@@ -3,19 +3,14 @@ import axios from 'axios';
 import { reactive } from 'vue';
 import auth from '../auth';
 import router from '../router';
-import { reloadLogin } from '../components/Navbar.vue';
 
 const data = reactive({
     username: '',
     password: '',
 });
 
-const authStatus = reactive({
-    failed: false
-});
-
 const authenticateLogin = async () => {
-    authStatus.failed = false;
+    auth.status.failed = false;
     try {
         const res = await axios({
             method: "POST",
@@ -28,13 +23,12 @@ const authenticateLogin = async () => {
             const token = authorization.split(' ').pop();
     
             localStorage.setItem("authorization", token);
-            reloadLogin();
             router.push({ path: '/portfolio' });
         }
 
     } catch(error) {
         console.log(error);
-        authStatus.failed = true;
+        auth.status.failed = true;
     }
 }
 
@@ -49,7 +43,7 @@ const authenticateLogin = async () => {
         <p>
             <RouterLink to="/sign-up">Sign Up</RouterLink>
         </p>
-        <p v-if="authStatus.failed">
+        <p v-if="auth.status.failed">
             Invalid username and/or password :(
         </p>
     </div>
