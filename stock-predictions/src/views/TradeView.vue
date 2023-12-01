@@ -2,17 +2,14 @@
 import axios from 'axios';
 import auth from '../auth';
 import {reactive,onMounted} from 'vue';
+import portfolio from '../portfolio';
 
 const stockData = reactive({
     ticker: 'IBM',
     price: 0,
 });
 
-const authStatus = reactive({
-    success: false,
-    failed: false,
-    error: false,
-    errorMsg: "",
+const data = reactive({
     total_money: 0
 });
 
@@ -95,50 +92,18 @@ const getLatestStockPrice = async (ticker, date) => {
 
 // what if you always got the latest stocks?
 
-const getUserTotalMoney = async () => {
-    try {
-        let total = 10000 
-        const res = await axios({
-            method: "GET",
-            url: "http://localhost:8080/users/view"+"?username=" + username.value
-        });
-        if (res.status === 200) {
-            console.log(res.data.positions)
-            authStatus.success = true;
-            if(res.data.positions.length > 0 ){
-                for (const position of res.data.positions) {
-                console.log(position.ticker)
-                console.log(position.opened)
-                if (!position.closed){
-                    let openingPrice = await getStockPrice(position.ticker, position.opened)
-                    console.log(openingPrice)
-                    total -= openingPrice
-                }
-            }
-            }
-            authStatus.total_money = total.toFixed(2)
-            console.log(total);
-        } else {
-            authStatus.failed = true;
-        }
-    } catch(error) {
-        console.log(error);
-        auth.failed = true;
-    }
-}
-
 
 const buyStock = async () => {
     try {
         stockData.price = await getLatestStockPrice(stockData.ticker, new Date(Date.now()).toISOString())
         // stockData.price = stockData[]
         stockData.price = Number(stockData.price)
-        authStatus.total_money = Number(authStatus.total_money)
+        data.total_money = Number(data.total_money)
         // console.log(stockData.ticker)
         // console.log("the stock data price is:"+stockData.price )
         // console.log('the total price is:'+authStatus.total_money)
         // console.log(authStatus.total_money > stockData.price)
-        if (authStatus.total_money > stockData.price){
+        if (data.total_money > stockData.price){
             const res = await axios({
             method: "POST",
             headers: {
@@ -149,11 +114,11 @@ const buyStock = async () => {
             });
 
             if (res.status === 200) {
-                authStatus.success = true;
-                authStatus.total_money -= stockData.price
-                authStatus.total_money = authStatus.total_money.toFixed(2)
+                auth.status.success = true;
+                data.total_money -= stockData.price
+                data.total_money = data.total_money.toFixed(2)
             } else {
-                authStatus.failed = true;
+                auth.status.failed = true;
             }
         } else{
             console.log('YOU DONT HAVE ENOUGH MONEY TO BUY THIS STOCK')
@@ -195,15 +160,18 @@ const buyStock = async () => {
 // }
 
 onMounted(async () => {
-    await getUserFromToken();
-    await getUserTotalMoney();
+    await auth.validate();
+    if(auth.status.success) {
+        await getUserFromToken();
+        data.total_money = await portfolio.getAvailableMoney();
+    }
 });
 
 </script>
 
 <template>
     <h1>{{ username.value }} Portfolio</h1>
-    <div> You currently have {{ authStatus.total_money }}$ to spend!</div>
+    <div> You currently have {{ data.total_money }}$ to spend!</div>
     <div class='columns is-centered'>
       <div class='column has-text-centered'>
         <form @submit.prevent='updateStock'>

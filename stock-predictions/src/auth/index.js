@@ -1,7 +1,22 @@
 import { reactive } from 'vue';
+import axios from 'axios';
 
-const auth = reactive({
-    token: ''
+const status = reactive({
+    success: false,
+    failed: false,
+    error: false,
+    errorMsg: ""
 });
 
-export default { auth };
+const validate = async () => {
+    status.success = false;
+    status.failed = false;
+    try {
+        await axios.get('/users/view');
+        status.success = true;
+    } catch(error) {
+        status.failed = true;
+    }
+}
+
+export default { status, validate };
