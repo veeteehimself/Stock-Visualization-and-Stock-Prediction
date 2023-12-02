@@ -36,7 +36,7 @@ const getValue = async () => {
             if (openingPrice && closingPrice)
                 totalValue += closingPrice - openingPrice;
         }
-        return totalValue;
+        return totalValue.toFixed(2);
     } catch (error) {
         console.log(error);
         auth.status.error = true;
@@ -62,7 +62,7 @@ const getAvailableMoney = async () => {
                 totalValue -= openingPrice;
             }
         }
-        return totalValue;
+        return totalValue.toFixed(2);
     } catch (error) {
         console.log(error);
         auth.status.error = true;
