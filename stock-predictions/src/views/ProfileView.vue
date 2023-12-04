@@ -45,20 +45,24 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div v-if="auth.status.success">
-        <h1>{{ data.user.username }}'s Portfolio</h1>
-        <h2>Portfolio Value: ${{ data.portfolioValue }}</h2>
-        <h2>Available Funds: ${{ data.availableMoney }}</h2>
-        <p>Account created {{ data.user.created }} - keep up the good work!</p>
-        <button @click="logOut">Log out</button>
-    </div>
-    <div v-if="auth.status.failed">
-        <p>
-            You need to <a href="http://localhost:5173/login">log in</a> or <a href="http://localhost:5173/sign-up">sign up</a> to use this feature.
-        </p>
-    </div>
-    <div v-if="auth.status.error">
-        <p> {{  auth.status.errorMsg }} </p>
+    <div class='columns is-centered'>
+        <div class='column has-text-centered'>
+            <div v-if="auth.status.success">
+                <h1>{{ data.user.username }}'s Portfolio</h1>
+                <h2>Portfolio Value: ${{ data.portfolioValue }}</h2>
+                <h2>Available Funds: ${{ data.availableMoney }}</h2>
+                <p>Account created {{ data.user.created }} - keep up the good work!</p>
+                <button @click="logOut">Log out</button>
+            </div>
+            <div v-if="auth.status.failed">
+                <p>
+                    You need to <a href="http://localhost:5173/login">log in</a> or <a href="http://localhost:5173/sign-up">sign up</a> to use this feature.
+                </p>
+            </div>
+            <div v-if="auth.status.error">
+                <p> {{  auth.status.errorMsg }} </p>
+            </div>
+        </div>
     </div>
 </template>
 

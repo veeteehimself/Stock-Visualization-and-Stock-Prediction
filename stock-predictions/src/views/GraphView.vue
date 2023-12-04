@@ -96,17 +96,9 @@ provide('stockData', stockData);
 </template>
 
 <style scoped>
-* {
-    font-size: 1.15rem;
-}
-
-form {
-    margin-top: 1rem;
-}
-
 .chart-container {
     position: relative;
     height: 85vh;
-    width: 85vw
+    width: 85vw;
 }
 </style>

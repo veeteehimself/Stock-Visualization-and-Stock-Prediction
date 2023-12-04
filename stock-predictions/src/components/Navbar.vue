@@ -1,33 +1,55 @@
+<script setup>
+    import ThemeSetter from './ThemeSetter.vue'
+    import { ref } from 'vue';
+    let active = ref(false);
+</script>
+
 <template>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <RouterLink class="nav-link" to="/">Home</RouterLink>
-          </li>
-          <li class="nav-item">
-            <RouterLink class="nav-link" to="/predict">Predict</RouterLink>
-          </li>
-          <li class="nav-item">
-            <RouterLink class="nav-link" to="/trade">Trade</RouterLink>
-          </li>
-          <li class="nav-item">
-            <RouterLink class="nav-link" to="/portfolio">Portfolio</RouterLink>
-          </li>
-          <li class="nav-item">
-            <RouterLink class="nav-link" to="/profile">Profile</RouterLink>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-burger" @click="active = !active" role="button" data-target="nav" aria-label="menu" aria-expanded="false">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="nav" class="navbar-menu" :class="active ? 'is-active' : ''">
+            <div class="navbar-start">
+                <router-link class="navbar-item" to="/">Home</router-link>
+                <router-link class="navbar-item" to="/predict">Predict</router-link>
+                <router-link class="navbar-item" to="/trade">Trade</router-link>
+                <router-link class="navbar-item" to="/portfolio">Portfolio</router-link>
+                <router-link class="navbar-item" to="/profile">Profile</router-link>
+            </div>
+        </div>
+
+        <div class="navbar-end">
+            <ThemeSetter />
+        </div>
+    </nav>
 </template>
   
-<script setup>
+<style scoped>
+    nav {
+        margin-bottom: 1rem;
+    }
 
-</script>
+    .navbar-menu.is-active {
+        position: fixed;
+        left: 0;
+    }
+
+    .navbar-burger,
+    .navbar-item {
+        color: var(--foreground);
+        border-radius: .25rem;
+        margin: .25rem;
+    }
+
+    .navbar-burger:hover,
+    .navbar-item:hover {
+        color: var(--background);
+        background: var(--magenta);
+    }
+</style>

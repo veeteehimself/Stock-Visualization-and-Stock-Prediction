@@ -170,30 +170,29 @@ onMounted(async () => {
 </script>
 
 <template>
-    <h1>{{ username.value }} Portfolio</h1>
-    <div> You currently have {{ data.total_money }}$ to spend!</div>
     <div class='columns is-centered'>
-      <div class='column has-text-centered'>
-        <form @submit.prevent='updateStock'>
-          <div>Select which stock you want to buy or sell</div>
-
-          <input type='text' v-model='stockData.ticker' placeholder='Enter the symbol of the stock you want to enter'>
-          <button type='submit' class='submit'>Select</button>
-        </form>
-      </div>
+        <div class='column has-text-centered'>
+            <h1>{{ username.value }} Portfolio</h1>
+            <div> You currently have {{ data.total_money }}$ to spend!</div>
+        </div>
     </div>
     <div class='columns is-centered'>
-        The price of the current stock you are looking at is : {{ stockData.price }}
+        <div class='column has-text-centered'>
+            <form @submit.prevent='updateStock'>
+                <p>Select which stock you want to buy or sell</p>
+                <input type='text' v-model='stockData.ticker' placeholder='Enter the symbol of the stock you want to enter'>
+                <button type='submit' class='submit'>Select</button>
+            </form>
+        </div>
     </div>
-    <div class='column has-text-centered'>
-        <form @submit.prevent='buyStock'>
-            <button> BUY 1 STOCK</button>
-        </form>
+    <div class='columns is-centered'>
+        <div class='column has-text-centered'>
+            <p>
+                The price of the current stock you are looking at is : {{ stockData.price }}
+            </p>
+            <form @submit.prevent='buyStock'>
+                <button> BUY 1 STOCK</button>
+            </form>
+        </div>
     </div>
-
-    
 </template>
-
-<style scoped>
-
-</style>

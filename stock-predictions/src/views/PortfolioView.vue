@@ -53,26 +53,30 @@ onMounted(async () => {
 </script>
 
 <template>
-    <h1>Portfolio</h1>
-    <div v-if="auth.status.success">
-        <h2>{{ data.value }}</h2>
-        <h3>Open positions</h3>
-        <div v-for="position in data.positions.filter(p => !p.doc.closed)">
-            Ticker: {{ position.doc.ticker }}  Bought at: {{ position.openingPrice }} Value: {{ position.closingPrice }} <div :class="{positive: position.closingPrice-position.openingPrice>0, negative: position.closingPrice-position.openingPrice<0}">Net gain: {{ position.closingPrice - position.openingPrice }}</div>
-            <button @click="closePosition(position.doc)">Sell</button>
+    <div class='columns is-centered'>
+        <div class='column has-text-centered'>
+            <h1>Portfolio</h1>
+            <div v-if="auth.status.success">
+                <h2>{{ data.value }}</h2>
+                <h3>Open positions</h3>
+                <div v-for="position in data.positions.filter(p => !p.doc.closed)">
+                    Ticker: {{ position.doc.ticker }}  Bought at: {{ position.openingPrice }} Value: {{ position.closingPrice }} <div :class="{positive: position.closingPrice-position.openingPrice>0, negative: position.closingPrice-position.openingPrice<0}">Net gain: {{ position.closingPrice - position.openingPrice }}</div>
+                    <button @click="closePosition(position.doc)">Sell</button>
+                </div>
+                <h3>Closed positions</h3>
+                <div v-for="position in data.positions.filter(p => p.doc.closed)">
+                    Ticker: {{ position.doc.ticker }}  Bought at: {{ position.openingPrice }} Sold at: {{ position.closingPrice }} <div :class="{positive: position.closingPrice-position.openingPrice>0, negative: position.closingPrice-position.openingPrice<0}">Net gain: {{ position.closingPrice - position.openingPrice }}</div>
+                </div>
+            </div>
+            <div v-if="auth.status.failed">
+                <p>
+                    You need to <a href="http://localhost:5173/login">log in</a> or <a href="http://localhost:5173/sign-up">sign up</a> to use this feature.
+                </p>
+            </div>
+            <div v-if="auth.status.error">
+                <p> {{  auth.status.errorMsg }} </p>
+            </div>
         </div>
-        <h3>Closed positions</h3>
-        <div v-for="position in data.positions.filter(p => p.doc.closed)">
-            Ticker: {{ position.doc.ticker }}  Bought at: {{ position.openingPrice }} Sold at: {{ position.closingPrice }} <div :class="{positive: position.closingPrice-position.openingPrice>0, negative: position.closingPrice-position.openingPrice<0}">Net gain: {{ position.closingPrice - position.openingPrice }}</div>
-        </div>
-    </div>
-    <div v-if="auth.status.failed">
-        <p>
-            You need to <a href="http://localhost:5173/login">log in</a> or <a href="http://localhost:5173/sign-up">sign up</a> to use this feature.
-        </p>
-    </div>
-    <div v-if="auth.status.error">
-        <p> {{  auth.status.errorMsg }} </p>
     </div>
 </template>
 
