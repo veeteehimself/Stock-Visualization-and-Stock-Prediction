@@ -163,7 +163,7 @@ onMounted(async () => {
     await auth.validate();
     if(auth.status.success) {
         await getUserFromToken();
-        data.total_money = await (await portfolio.getAvailableMoney()).toFixed(2);
+        data.total_money = await (await portfolio.getAvailableMoney());
     }
 });
 
