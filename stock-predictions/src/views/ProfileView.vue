@@ -48,7 +48,7 @@ onMounted(async () => {
     <div class='columns is-centered'>
         <div class='column has-text-centered'>
             <div v-if="auth.status.success">
-                <h1>{{ data.user.username }}'s Portfolio</h1>
+                <h1>{{ data.user.username }}'s Profile</h1>
                 <h2>Portfolio Value: ${{ data.portfolioValue }}</h2>
                 <h2>Available Funds: ${{ data.availableMoney }}</h2>
                 <p>Account created {{ data.user.created }} - keep up the good work!</p>
